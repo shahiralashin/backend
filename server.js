@@ -1,7 +1,6 @@
 // Import required modules
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
-const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 
@@ -12,6 +11,15 @@ const PORT = 3000; // Port the server will run on
 // MongoDB connection URI
 const uri = 'mongodb+srv://lashinshahira:SrplydyWA1oljHFT@cluster0.axeh7n5.mongodb.net/webstore';
 let db, lessonsCollection, ordersCollection; // Variables to store MongoDB references
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+
+    next();
+})
 
 // Middleware for JSON body parsing
 app.use(express.json());
