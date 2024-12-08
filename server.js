@@ -184,17 +184,5 @@ app.get('/api/search', async (req, res) => {
     }
 });
 
-// Handle requests for missing images with a custom 404 error response
-app.use('/images/*', (req, res, next) => {
-    const imagePath = path.join(__dirname, 'backend', 'images', req.params[0]);
-    fs.access(imagePath, fs.constants.F_OK, (err) => {
-        if (err) {
-            res.status(404).json({ error: "Image not found" });
-        } else {
-            next();
-        }
-    });
-});
-
 // Start the server
 startServer();
