@@ -13,12 +13,18 @@ const PORT = 3000; // Port the server will run on
 const uri = 'mongodb+srv://lashinshahira:SrplydyWA1oljHFT@cluster0.axeh7n5.mongodb.net/webstore';
 let db, lessonsCollection, ordersCollection; // Variables to store MongoDB references
 
-// Middleware for Cross-Origin Resource Sharing (CORS) and JSON body parsing
-app.use(cors());
+// Middleware for CORS
+app.use(cors({
+    origin: 'https://shahiralashin.github.io/frontend/',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Middleware for JSON body parsing
 app.use(express.json());
 
 // Serve static files (frontend assets) from a specific directory
-app.use(express.static(path.join(__dirname, '..', 'frontend')));
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
 // Middleware to log all incoming requests
 app.use((req, res, next) => {
@@ -182,7 +188,7 @@ app.get('/api/search', async (req, res) => {
 
 // Serve the main frontend HTML file for all unrecognized routes
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'));
 });
 
 // Handle requests for missing images with a custom 404 error response
