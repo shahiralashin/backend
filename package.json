@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "Module: CST3144",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
@@ -11,8 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
     "express": "^4.21.2",
-    "mongodb": "^6.11.0"
+    "mongodb": "^3.6.3"
   }
 }
