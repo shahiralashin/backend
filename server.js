@@ -69,8 +69,41 @@ async function startServer() {
     }
 }
 
-// Serve static files (i.e., images and Javascript file containing lessons)
-app.use('/images', express.static(path.join(__dirname, 'static'))); 
+// Serve static files (i.e., images)
+app.use('/images', express.static(path.join(__dirname, 'static'), {
+    setHeaders: (res, path, stat) => {
+        // Check if the requested file exists and is an image
+        if (!fs.existsSync(path)) {
+            res.status(404).send("Image not found");
+        }
+        else if (!isImageFile(path)) {
+            res.status(415).send("Unsupported image format");
+        }
+    }
+}));
+
+// Helper function to check if a file is an image
+function isImageFile(filePath) {
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    const ext = path.extname(filePath).toLowerCase();
+    return allowedExtensions.includes(ext);
+}
+
+// Error handling for image not found
+app.use((req, res, next) => {
+    // If no route matched for images
+    if (req.originalUrl.startsWith('/images') && !fs.existsSync(path.join(__dirname, 'static', req.path))) {
+        return res.status(404).send("Image not found");
+    }
+    next();
+});
+
+// Generic error handler for all routes
+app.use((err, req, res, next) => {
+    console.error(err.stack); // Log error stack trace
+    res.status(500).send('Internal Server Error');
+});
+
 
 // API endpoint to retrieve all lessons
 app.get('/api/lessons', async (req, res) => {
