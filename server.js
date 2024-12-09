@@ -12,6 +12,7 @@ const PORT = 3000; // Port the server will run on
 const uri = 'mongodb+srv://lashinshahira:SrplydyWA1oljHFT@cluster0.axeh7n5.mongodb.net/webstore';
 let db, lessonsCollection, ordersCollection; // Variables to store MongoDB references
 
+//CORS (Cross-Origin Resource Sharing)
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -69,7 +70,7 @@ async function startServer() {
 }
 
 // Serve static files (i.e., images and Javascript file containing lessons)
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname, 'static'))); 
 
 // API endpoint to retrieve all lessons
 app.get('/api/lessons', async (req, res) => {
@@ -182,18 +183,6 @@ app.get('/api/search', async (req, res) => {
         console.error("Error searching lessons:", err);
         res.status(500).send("Error searching lessons");
     }
-});
-
-// Handle requests for missing images with a custom 404 error response
-app.use('/images/*', (req, res, next) => {
-    const imagePath = path.join(__dirname, 'backend', 'images', req.params[0]);
-    fs.access(imagePath, fs.constants.F_OK, (err) => {
-        if (err) {
-            res.status(404).json({ error: "Image not found" });
-        } else {
-            next();
-        }
-    });
 });
 
 // Start the server
